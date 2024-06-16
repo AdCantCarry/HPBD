@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Sinh Nhật Mẹ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffeb3b; /* Nền màu vàng */
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .sign {
+            font-size: 2.5em;
+            color: #fff;
+            background-color: #ff5722;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .letter {
+            position: relative;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        #letterContent {
+            margin-top: 20px;
+        }
+
+        .shine {
+            position: absolute;
+            width: 50px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.5);
+            top: 50%;
+            transform: translateY(-50%);
+            animation: shine 2s infinite linear;
+        }
+
+        .shine2 {
+            left: auto;
+            right: 0;
+            animation: shine 2s infinite linear reverse;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -50px;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        canvas#fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Đảm bảo không can thiệp với các phần tử khác */
+            z-index: 999; /* Đặt trên cùng */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sign animate__animated animate__bounceInDown">
+            Happy Birthday
+        </div>
+        <div class="letter">
+            <div id="letterContent" class="animate__animated" style="display:none;">
+                <p>Chúc mẹ sinh nhật vui vẻ, hem có xiền nên hem có vàng heheee :></p>
+            </div>
+            <div class="shine"></div>
+            <div class="shine shine2"></div>
+        </div>
+    </div>
+    <canvas id="fireworks"></canvas>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var letterContent = document.getElementById('letterContent');
+                letterContent.style.display = 'block';
+                letterContent.classList.add('animate__fadeIn');
+                startFireworks();
+            }, 5000);
+        });
+
+        function startFireworks() {
+            var canvas = document.getElementById('fireworks');
+            var ctx = canvas.getContext('2d');
+            var particles = [];
+            var colors = ['#ff5722', '#ffeb3b', '#ff9800', '#ffc107'];
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            function createParticle(x, y) {
+                var color = colors[Math.floor(Math.random() * colors.length)];
+                var particle = {
+                    x: x,
+                    y: y,
+                    radius: Math.random() * 4 + 1,
+                    color: color,
+                    dx: (Math.random() - 0.5) * 8,
+                    dy: (Math.random() - 0.5) * 8,
+                    life: 100
+                };
+                particles.push(particle);
+            }
+
+            function updateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (var i = 0; i < particles.length; i++) {
+                    var p = particles[i];
+                    p.x += p.dx;
+                    p.y += p.dy;
+                    p.life -= 1;
+
+                    if (p.life <= 0) {
+                        particles.splice(i, 1);
+                        i--;
+                        continue;
+                    }
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                }
+            }
+
+            function loop() {
+                updateParticles();
+                requestAnimationFrame(loop);
+            }
+
+            canvas.addEventListener('click', function(event) {
+                for (var i = 0; i < 30; i++) {
+                    createParticle(event.clientX, event.clientY);
+                }
+            });
+
+            loop();
+        }
+    </script>
+</body>
+</html>
